@@ -1,0 +1,6 @@
+matplotlib
+pandas
+feather-format
+seaborn
+click
+flake8
