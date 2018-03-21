@@ -17,9 +17,33 @@ There is no data regarding past incident, you can only access this information v
 
 However, there is a tweeter account,like this [one](https://twitter.com/Ligne7_RATP) for each metro line.It can probably be used to retrieve historical information.
 
+## Install
+
+*optionnal*
+
+Create a virtualenv 
+
+```
+make create_environement
+```
+
+Download the raw data
+
+```bash
+Make download
+```
+
+Build the dataset
+
+```bash
+make data
+```
+
 ## Repository organisation
 
 This repository organisation is heavily inspired by the [cookiecutter-data-science](https://github.com/drivendata/cookiecutter-data-science)
+
+>We're not talking about bikeshedding the indentation aesthetics or pedantic formatting standards — ultimately, data science code quality is about correctness and reproducibility.
 
 ```
 ├── Makefile           <- Makefile with commands like `make data` or `make download`
