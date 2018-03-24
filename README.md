@@ -1,6 +1,6 @@
 # Paris metro
 
-** WORK IN PROGRESS **
+**WORK IN PROGRESS**
 
 Exploration of the Parisian subway.
 
@@ -41,9 +41,9 @@ make data
 
 ## Repository organisation
 
-This repository organisation is heavily inspired by the [cookiecutter-data-science](https://github.com/drivendata/cookiecutter-data-science)
+Choice here are heavily inspired by the [cookiecutter-data-science](https://github.com/drivendata/cookiecutter-data-science)
 
->We're not talking about bikeshedding the indentation aesthetics or pedantic formatting standards — ultimately, data science code quality is about correctness and reproducibility.
+>We're not talking about bikeshedding the indentation aesthetics or pedantic formatting standards — ultimately, data science code quality is about correctness and reproducibility.:neckbeard:
 
 ```
 ├── Makefile           <- Makefile with commands like `make data` or `make download`
