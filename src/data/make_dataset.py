@@ -18,6 +18,76 @@ map_jour_fr = {
 }
 
 
+def make_gtfs(path, agency_id=439):
+    fields = [
+        'route_id',
+        'stop_id',
+        'service_id',
+        'route_short_name',
+        'trip_short_name',
+        'trip_headsign',
+        'route_color',
+        'trip_id',
+        'direction_id',
+        'wheelchair_accessible',
+        'departure_time',
+        'stop_name',
+        'stop_lat',
+        'stop_lon',
+        'wheelchair_boarding',
+        'start_date',
+        'end_date',
+        'day',
+    ]
+
+    cats = [
+        'route_id',
+        'stop_id',
+        'service_id',
+        'route_short_name',
+        'trip_short_name',
+        'trip_headsign',
+        'route_color',
+        'trip_id',
+        'direction_id',
+        'wheelchair_accessible',
+        'stop_name',
+        'stop_lat',
+        'stop_lon',
+        'wheelchair_boarding',
+        'start_date',
+        'end_date',
+        'day',
+    ]
+    p = Path(path)
+    df_routes = pd.read_csv(p/'routes.txt').query('agency_id == @agency_id')
+    df_trips = pd.read_csv(p/'trips.txt')
+    df_stoptimes = pd.read_csv(p/'stop_times.txt')
+    df_stops = pd.read_csv(p/'stops.txt')
+    df_calendar = pd.read_csv(p/'calendar.txt')
+    tidy_calendar = (df_calendar.melt(id_vars=[
+                     'service_id', 'start_date', 'end_date'])
+                     .query('value==1')
+                     .rename(columns={'variable': 'day'})
+                     .drop(columns='value'))
+
+    result = (df_routes.merge(df_trips, on='route_id')
+              .merge(tidy_calendar, on='service_id')
+              .merge(df_stoptimes, on='trip_id')
+              .merge(df_stops, on='stop_id')
+              .loc[:, fields]
+              )
+    for cat in cats:
+        result[cat] = result[cat].astype('category')
+    return result
+
+
+def get_schedule(path):
+    df = make_gtfs(path, agency_id=439)
+    return (df.sort_values(['stop_name', 'trip_headsign', 'departure_time'])
+            .loc[:, ['stop_name', 'trip_headsign', 'departure_time', 'day']])
+
+
 def load_stif(path):
     data = json.load(open(path))
     df = pd.DataFrame([elt['fields'] for elt in data])
@@ -130,6 +200,9 @@ def main(input_filepath, output_filepath):
     logger.info('building ratp-line dataset')
     save(make_ratp(path_in/'ratp-trafic-2016.json'),
          path_out/'ratp_line.feather')
+    logger.info('building gtfs dataset')
+    save(get_schedule(path_in),
+         path_out/'schedule.feather')
 
 
 if __name__ == '__main__':
