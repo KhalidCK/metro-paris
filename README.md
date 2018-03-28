@@ -13,7 +13,7 @@ After some google search, the [iledefrance-mobilites](https://www.iledefrance-mo
 
 The most promising data are about the number of users per day and an hourly *profile* breakdown per hour.
 
-Some exploration of the profile breakdown dataset is available in the ([notebook](https://nbviewer.jupyter.org/github/KhalidCK/metro-paris/blob/master/notebooks/01%20-%20Explore%20STIF%20profile%20dataset.ipynb)) and [TABLEAU](https://public.tableau.com/shared/BJGKTGYH7?)
+Some exploration of the profile breakdown dataset is available in the [notebook](https://nbviewer.jupyter.org/github/KhalidCK/metro-paris/blob/master/notebooks/01%20-%20Explore%20STIF%20profile%20dataset.ipynb) and [TABLEAU](https://public.tableau.com/shared/BJGKTGYH7?)
 
 There is no data regarding past incidents, you can only access this information via a real-time API.
 
