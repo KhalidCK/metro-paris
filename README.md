@@ -56,6 +56,7 @@ Choice here are heavily inspired by the [cookiecutter-data-science](https://gith
 │
 ├── notebooks          <- Jupyter notebooks. 
 │
+├── references         <- Data dictionaries, manuals, and all other explanatory materials.
 ├── reports            <- Generated analysis as HTML, PDF, LaTeX, etc.
 │   └── figures        <- Generated graphics and figures to be used in reporting
 │
