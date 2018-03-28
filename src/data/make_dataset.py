@@ -180,6 +180,10 @@ def save(df, path):
     df.reset_index(drop=True).to_feather(path)
 
 
+def save_xlsx(df, path):
+    df.to_excel(path, index=False)
+
+
 @click.command()
 @click.argument('input_filepath', type=click.Path(exists=True))
 @click.argument('output_filepath', type=click.Path())
@@ -192,6 +196,11 @@ def main(input_filepath, output_filepath):
     logger = logging.getLogger(__name__)
     logger.info('making final data set from raw data ...')
     logger.info('building profile dataset')
+    df_profile = build_profil(Path(input_filepath))
+    save(df_profile,
+         path_out/'profile-2017.feather')
+    save_xlsx(df_profile,
+              path_out/'profile-2017.xlsx')
     save(build_profil(Path(input_filepath)),
          path_out/'profile-2017.feather')
     logger.info('building nb-validation dataset')
