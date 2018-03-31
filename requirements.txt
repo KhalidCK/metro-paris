@@ -1,6 +1,7 @@
 matplotlib
-pandas
-feather-format
+ipython
+jupyter
+pytest
 seaborn
-click
 flake8
+git+https://github.com/peopledoc/workalendar

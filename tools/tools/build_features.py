@@ -32,12 +32,11 @@ def read_vacances(path):
     return df
 
 
-def is_paris_holiday(strday, path):
-    df = read_vacances(path).query('academie == "Paris"')
-    return not df.query('begin <= @strday <end').empty
+def is_paris_holiday(day, df):
+    return not df.query('(academie == "Paris") and (begin <= @day <end)').empty
 
 
-def to_profile(day, path):
+def to_profile(day, df):
     """
     Parameters
     ----------
@@ -50,8 +49,7 @@ def to_profile(day, path):
         return nb == 5
 
     weekday = day.weekday()
-    if is_paris_holiday(day.strftime('%Y-%m-%d'), path):
-        print('holiday')
+    if is_paris_holiday(day, df):
         if jour_ouvre(weekday):
             # 'JOVS': 'Jour Ouvré en période de Vacances Scolaires',
             return 'JOVS'

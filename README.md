@@ -65,10 +65,4 @@ Choice here are heavily inspired by the [cookiecutter-data-science](https://gith
 ├── requirements.txt   <- The requirements file for reproducing the analysis environment, e.g.
 │                         generated with `pip freeze > requirements.txt`
 │
-├── src                <- Source code for use in this project.
-│   ├── __init__.py    <- Makes src a Python module
-│   │
-│   ├── data           <- Scripts to download or generate data
-│   │   └── make_dataset.py
-│   │
-```
+├── tools <- Source code for use in this project.

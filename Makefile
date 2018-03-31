@@ -7,7 +7,8 @@ PYTHON_VERSION = 3.6.2
 PYTHON_INTERPRETER = python
 
 requirements: 
-	echo 'requirements'
+	pip install -r requirements.txt
+	pip install -e tools
 
 ## Download raw data
 download:
@@ -16,7 +17,7 @@ download:
 
 ## Make Dataset
 data: requirements
-	$(PYTHON_INTERPRETER) src/data/make_dataset.py data/raw/ data/processed/
+	tools data/raw/ data/processed/
 
 ## Delete all compiled Python files
 clean:
