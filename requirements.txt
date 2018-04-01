@@ -3,5 +3,8 @@ ipython
 jupyter
 pytest
 seaborn
+scipy
 flake8
+autopep8
+isort
 git+https://github.com/peopledoc/workalendar
