@@ -1,5 +1,5 @@
-from workalendar.europe import France
 import pandas as pd
+from workalendar.europe import France
 
 CAL = France()
 
@@ -68,3 +68,40 @@ def to_profile(day, df):
         else:
             # 'DIJFP': 'Dimanche, Jour Férié et ponts'  # TODO:pont
             return 'DIJFP'
+
+
+def add_profile(df_nb_validation, df_vac):
+    """ add profile to nb_validation dataset
+    see `map_jour` for details
+    """
+    days = df_nb_validation.date.drop_duplicates().reset_index(drop=True)
+    profile = days.apply(lambda x: to_profile(x, df_vac))
+    profile.name = 'profile'
+    mapping = pd.concat([days, profile], axis=1)
+    return pd.merge(df_nb_validation, mapping, on='date')
+
+
+def augment_df_nb(df_nb_validation, stop_meta, df_vac):
+    """ merge on 'stop'
+
+    Fields added
+    'is_end': is it the first or last stop of a line
+    'line': name of the line
+    'nbline': nb of lines going through the station
+    'stop_lat'
+    'stop_lon'
+    """
+    nb_lines = (stop_meta[['stop', 'line']]
+                .groupby('stop')[['line']]
+                .nunique()
+                .rename(columns={'line': 'nbline'})
+                .reset_index()
+                )
+    dataset = add_profile(df_nb_validation, df_vac)
+    dataset = pd.merge(dataset, nb_lines, on='stop')
+    dataset['traffic_line'] = dataset.value / dataset.nbline
+    dataset['is_end'] = dataset.stop.isin(stop_meta.trip_headsign)
+    fields = ['stop', 'line', 'stop_lat', 'stop_lon']
+    return pd.merge(dataset,
+                    stop_meta[fields].drop_duplicates(),
+                    on='stop')

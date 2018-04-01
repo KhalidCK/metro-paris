@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
-import click
-import logging
-from pathlib import Path
 import json
-import pandas as pd
-import numpy as np
+import logging
 import re
+from pathlib import Path
+
+import click
+import numpy as np
+import pandas as pd
 
 map_jour_fr = {
     'JOHV': 'Jour Ouvré Hors Vacances Scolaires',
@@ -57,12 +58,11 @@ def make_gtfs(path, agency_id=439):
         'end_date',
         'day',
     ]
-    p = Path(path)
-    df_routes = pd.read_csv(p/'routes.txt').query('agency_id == @agency_id')
-    df_trips = pd.read_csv(p/'trips.txt')
-    df_stoptimes = pd.read_csv(p/'stop_times.txt')
-    df_stops = pd.read_csv(p/'stops.txt')
-    df_calendar = pd.read_csv(p/'calendar.txt')
+    df_routes = pd.read_csv(path/'routes.txt').query('agency_id == @agency_id')
+    df_trips = pd.read_csv(path/'trips.txt')
+    df_stoptimes = pd.read_csv(path/'stop_times.txt')
+    df_stops = pd.read_csv(path/'stops.txt')
+    df_calendar = pd.read_csv(path/'calendar.txt')
     tidy_calendar = (df_calendar.melt(id_vars=[
                      'service_id', 'start_date', 'end_date'])
                      .query('value==1')
@@ -80,8 +80,23 @@ def make_gtfs(path, agency_id=439):
     return result
 
 
-def get_schedule(path):
-    df = make_gtfs(path, agency_id=439)
+def get_meta_stop(df_gtfs):
+    fields = ['stop_name',
+              'trip_headsign',
+              'route_short_name',
+              'route_color',
+              'stop_lat',
+              'stop_lon']
+    return (df_gtfs.loc[:, fields]
+            .drop_duplicates()
+            .reset_index(drop=True)
+            .rename(columns={'stop_name': 'stop', 'route_short_name': 'line'})
+            .assign(stop=lambda x: x['stop'].str.lower())
+            .assign(trip_headsign=lambda x: x['trip_headsign'].str.lower())
+            )
+
+
+def get_schedule(df):
     return (df.sort_values(['stop_name', 'trip_headsign', 'departure_time'])
             .loc[:, ['stop_name', 'trip_headsign', 'departure_time', 'day']])
 
@@ -136,7 +151,6 @@ def get_df_nb(path):
 
 def get_df_profil(path):
     df, sem = read_json(path)
-    df = df.replace({'cat_jour': map_jour_fr})
     fields = ['cat_jour', 'libelle_arret', 'trnc_horr_60', 'pourc_validations']
     return (df.query("code_stif_res=='110'")
             .loc[:, fields]
@@ -174,8 +188,14 @@ def build_nb(path):
     return build(path.glob('nb-validation*.json'), get_df_nb)
 
 
+def to_lower(x):
+    return x.str.lower() if(x.dtype == 'object') else x
+
+
 def save(df, path):
-    df.reset_index(drop=True).to_feather(path)
+    return (df.apply(to_lower)
+            .reset_index(drop=True)
+            .to_feather(path))
 
 
 def save_xlsx(df, path):
@@ -195,10 +215,16 @@ def main(input_filepath, output_filepath):
     logger.info('making final data set from raw data ...')
     logger.info('building profile dataset')
     df_profile = build_profil(Path(input_filepath))
+    df_gtfs = make_gtfs(path_in, agency_id=439)
+    logger.info('building gtfs dataset')
+    save(get_schedule(df_gtfs),
+         path_out/'schedule.feather')
+    logger.info('building gtfs metadata')
+    stop_meta = get_meta_stop(df_gtfs)
+    save(stop_meta,
+         path_out/'meta_stop.feather')
     save(df_profile,
          path_out/'profile-2017.feather')
-    save_xlsx(df_profile,
-              path_out/'profile-2017.xlsx')
     save(build_profil(Path(input_filepath)),
          path_out/'profile-2017.feather')
     logger.info('building nb-validation dataset')
@@ -207,9 +233,6 @@ def main(input_filepath, output_filepath):
     logger.info('building ratp-line dataset')
     save(make_ratp(path_in/'ratp-trafic-2016.json'),
          path_out/'ratp_line.feather')
-    logger.info('building gtfs dataset')
-    save(get_schedule(path_in),
-         path_out/'schedule.feather')
 
 
 if __name__ == '__main__':
