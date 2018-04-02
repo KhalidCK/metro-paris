@@ -102,6 +102,10 @@ def augment_df_nb(df_nb_validation, stop_meta, df_vac):
     dataset['traffic_line'] = dataset.value / dataset.nbline
     dataset['is_end'] = dataset.stop.isin(stop_meta.trip_headsign)
     fields = ['stop', 'line', 'stop_lat', 'stop_lon']
-    return pd.merge(dataset,
-                    stop_meta[fields].drop_duplicates(),
-                    on='stop')
+    dataset = pd.merge(dataset,
+                       stop_meta[fields].drop_duplicates(),
+                       on='stop')
+    return (dataset
+            .drop(columns='value')
+            .dropna()
+            .drop_duplicates())
