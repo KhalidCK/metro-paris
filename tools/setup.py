@@ -3,10 +3,11 @@
 
 """The setup script."""
 
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 requirements = ['Click>=6.0',
                 'pandas',
+                'tweepy',
                 'feather-format',
                 ]
 
