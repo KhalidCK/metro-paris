@@ -9,6 +9,8 @@ requirements = ['Click>=6.0',
                 'pandas',
                 'tweepy',
                 'feather-format',
+                'xlutils',
+                'openpyxl',
                 ]
 
 setup_requirements = ['pytest-runner', ]
