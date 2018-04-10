@@ -1,4 +1,3 @@
-**Work in progress**
 
 # Exploration of the Parisian subway
 
@@ -10,6 +9,9 @@ This study began with a discussion :
 You'll find some answer [here](https://github.com/KhalidCK/metro-paris/blob/master/reports/README.md)
 
 ## Install
+
+**Work in progress**
+
 
 *optionnal*
 
