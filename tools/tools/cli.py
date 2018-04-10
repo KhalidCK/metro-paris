@@ -8,6 +8,8 @@ import click
 import numpy as np
 import pandas as pd
 
+from tools.build_features import augment_df_nb
+
 map_jour_fr = {
     'JOHV': 'Jour Ouvré Hors Vacances Scolaires',
     'SAHV': 'Samedi Hors Vacances Scolaires',
@@ -152,11 +154,17 @@ def get_df_nb(path):
 def get_df_profil(path):
     df, sem = read_json(path)
     fields = ['cat_jour', 'libelle_arret', 'trnc_horr_60', 'pourc_validations']
+    rename = {'cat_jour': 'profile',
+              'libelle_arret': 'stop',
+              'trnc_horr_60': 'timespan',
+              'pourc_validations': 'percentage'}
     return (df.query("code_stif_res=='110'")
             .loc[:, fields]
             .replace('ND', np.NaN)
-            .assign(heure=lambda x: x['trnc_horr_60'].apply(change_trnc))
-            .assign(sem=[sem] * df.shape[0]))
+            .assign(hour=lambda x: x['trnc_horr_60'].apply(change_trnc))
+            .assign(sem=[sem] * df.shape[0])
+            .rename(columns=rename)
+            )
 
 
 def build(files, processing):
@@ -188,6 +196,25 @@ def build_nb(path):
     return build(path.glob('nb-validation*.json'), get_df_nb)
 
 
+def daily_ranking(df_nb_validation, stop_meta, df_vac):
+    def set_rank(group):
+        group['profile_rank'] = group.traffic_line.rank(ascending=False)
+        return group
+    dataset = augment_df_nb(df_nb_validation, stop_meta, df_vac)
+    return (dataset.groupby(['stop', 'profile'])
+            .mean().reset_index()
+            .sort_values(['profile', 'traffic_line'], ascending=False)
+            .groupby('profile').apply(set_rank)
+            ).rename(columns={'traffic_line': 'avg_traffic_per_platform'})
+
+
+def bi_dataset(df_profile, df_nb_validation, stop_meta, df_vac):
+    """ to be used with BI solution (TABLEAU,...)
+    """
+    ranking_profile = daily_ranking(df_nb_validation, stop_meta, df_vac)
+    return pd.merge(df_profile, ranking_profile, on=['profile', 'stop'])
+
+
 def to_lower(x):
     return x.str.lower() if(x.dtype == 'object') else x
 
@@ -209,13 +236,15 @@ def main(input_filepath, output_filepath):
     """ Runs data processing scripts to turn raw data from (../raw) into
         cleaned data ready to be analyzed (saved in ../processed).
     """
-    path_in = Path(input_filepath)
+    path_raw = Path(input_filepath) / 'raw'
+    path_external = Path(input_filepath) / 'external'
     path_out = Path(output_filepath)
     logger = logging.getLogger(__name__)
     logger.info('making final data set from raw data ...')
     logger.info('building profile dataset')
-    df_profile = build_profil(Path(input_filepath))
-    df_gtfs = make_gtfs(path_in, agency_id=439)
+    df_nb_validation = build_nb(Path(path_raw))
+    df_profile = build_profil(Path(path_raw))
+    df_gtfs = make_gtfs(path_raw, agency_id=439)
     logger.info('building gtfs dataset')
     save(get_schedule(df_gtfs),
          path_out/'schedule.feather')
@@ -225,13 +254,13 @@ def main(input_filepath, output_filepath):
          path_out/'meta_stop.feather')
     save(df_profile,
          path_out/'profile-2017.feather')
-    save(build_profil(Path(input_filepath)),
+    save(build_profil(Path(path_raw)),
          path_out/'profile-2017.feather')
     logger.info('building nb-validation dataset')
-    save(build_nb(Path(input_filepath)),
+    save(df_nb_validation,
          path_out/'nb-validation-2017.feather')
     logger.info('building ratp-line dataset')
-    save(make_ratp(path_in/'ratp-trafic-2016.json'),
+    save(make_ratp(path_raw/'ratp-trafic-2016.json'),
          path_out/'ratp_line.feather')
 
 
