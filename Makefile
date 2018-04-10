@@ -17,7 +17,7 @@ download:
 
 ## Make Dataset
 data: requirements
-	tools data/raw/ data/processed/
+	tools data/ data/processed/
 
 ## Delete all compiled Python files
 clean:
