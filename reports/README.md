@@ -2,42 +2,42 @@
 
 In Paris the metro is a daily necessity for most of us.
 
-The Parisian metro has 14 majors lines and has around 220 km of railroad. One original fact, compared to other European subway, is that stops are quite close : on average, the inter-distance between 2 station is 550m.
+It has 14 major lines and has around 220 km of railroads. One original fact, compared to other European subway, is that stops are quite close : on average, the inter-distance between 2 stations is 550 m.
 
-Lately I had a discussion and we tried to figure out when you should take the Parisian metro to avoid rush hours.
+Lately I had a discussion and we tried to figure out when you should take it to avoid rush hours.
 
 Common wisdom will say :
 
 * in the morning : between 8 to 9h
 * in the evening : between 17 to 19h
 
-Make sense from my personal experience, however I was wondering, is there is any data that can tackle this question ?
+Make sense from my  experience. However I was wondering, is there is any data that can tackle this question ?
 
 
 ## Getting the data
 
-After some googling there is not that many data regarding the number of people that get in and out, on a fine grain, of a metro station.
+After some googling there is not many data regarding the number of people that get in and out, on a fine grain, of a metro station.
 
-[iledefrance-mobilites](https://www.iledefrance-mobilites.fr/) published 2017 multiple dataset regarding the number of traveler that get into a station.
+Still, [iledefrance-mobilites](https://www.iledefrance-mobilites.fr/) published lately multiple datasets regarding the number of travelers that gets into a station in 2017.
 
-There are two kinds of dataset that are available, the first one describe the number of daily traveler that validated their ticket at a specific stop.
-The other is an *hourly ticket validation percentage per hour*, built according to some homemade profile, the methodology used is not described anywhere.
+There are two kinds of datasets that are available, the first one describe the number of daily travelers that validated their ticket at a specific stop.
+The other is a hourly ticket validation percentage , built according to some homemade profile, the methodology used does not seem to be explained anywhere.
 
 ## Tell me more
 
-Let's get a sense of the number of traveler that get every month on the metro
+Let's get a sense of the number of people that get a ride every month on the metro
 
 ![monthly traveler in millions](img/monthly-traveler.png)
 
-There is an expected deep in august when public holidays occurs.
+There is an expected deep in August when public holidays occur.
 
-An interesting insight, is to check how they are distributed across lines
+An interesting insight is to check how they are distributed across lines
 
 ![daily passenger distribution](img/daily-passenger-distribution.png)
 
 Each point represents the daily number of travelers 
 
-We'll now dive into the second dataset regarding pre-built profile.
+We'll now dive into the second dataset regarding prebuilt profile.
 
 There are 5 profiles defined :
 
@@ -48,7 +48,7 @@ There are 5 profiles defined :
 - Sundays and public holidays(Christmas,...)
 
 
-The hourly percentage is defined as : the number of daily validation to a specific station divided by the daily validation, therefore percentage on a given day sum-up to 100
+The hourly percentage is defined as : the number of daily validation to a specific station divided by the daily validation, therefore percentage on a given day sum-up to 100.
 
 Hereafter an overview
 
@@ -61,6 +61,7 @@ And for each profile
 
 ## So ?
 
-Looks like the common wisdom is correct on average, however distribution is not the same for all stop, and according to the stop it can make sense to go or leave on different hour. 
+Looks like the common wisdom is correct on average. However distribution is not the same for all stop, and it can make sense to go or leave for different hours.
 
-I have set-up a power plot [here](https://app.powerbi.com/view?r=eyJrIjoiNDg0NWRhNTYtMGY1Zi00ZjA5LTlhYTctNDQyYjgyMmI3ZTEwIiwidCI6IjkwYzdhMjBhLWYzNGItNDBiZi1iYzQ4LWI5MjUzYjZmNWQyMCIsImMiOjh9) if you want to explore more about it.
+I have set up a power plot [here](https://app.powerbi.com/view?r=eyJrIjoiNDg0NWRhNTYtMGY1Zi00ZjA5LTlhYTctNDQyYjgyMmI3ZTEwIiwidCI6IjkwYzdhMjBhLWYzNGItNDBiZi1iYzQ4LWI5MjUzYjZmNWQyMCIsImMiOjh9) if you want to explore more about it.
+
