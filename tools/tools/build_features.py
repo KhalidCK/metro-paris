@@ -36,7 +36,7 @@ def is_paris_holiday(day, df):
     return not df.query('(academie == "Paris") and (begin <= @day <end)').empty
 
 
-def to_profile(day, df):
+def to_profile(day, df_vac):
     """
     Parameters
     ----------
@@ -49,7 +49,7 @@ def to_profile(day, df):
         return nb == 5
 
     weekday = day.weekday()
-    if is_paris_holiday(day, df):
+    if is_paris_holiday(day, df_vac):
         if jour_ouvre(weekday):
             # 'JOVS': 'Jour Ouvré en période de Vacances Scolaires',
             return 'JOVS'
@@ -72,7 +72,7 @@ def to_profile(day, df):
 
 def add_profile(df_nb_validation, df_vac):
     """ add profile to nb_validation dataset
-    see `map_jour` for details
+    see `map_jour` for details, df are merged on date field
     """
     days = df_nb_validation.date.drop_duplicates().reset_index(drop=True)
     profile = days.apply(lambda x: to_profile(x, df_vac))
