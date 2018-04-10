@@ -1,23 +1,13 @@
-# Paris metro
+** Work in progress **
 
-**WORK IN PROGRESS**
-
-Exploration of the Parisian subway.
+# Exploration of the Parisian subway
 
 This study began with a discussion : 
 
 > What is the best time to take the metro to avoid the crowd ?
 > Is there some data to tackle this question ?
 
-After some google search, the [iledefrance-mobilites](https://www.iledefrance-mobilites.fr/) has some interesting report and also a dedicated [open data portal](https://opendata.stif.info/page/home/)
-
-The most promising data are about the number of users per day and an hourly *profile* breakdown per hour.
-
-Some exploration of the profile breakdown dataset is available in the [notebook](https://nbviewer.jupyter.org/github/KhalidCK/metro-paris/blob/master/notebooks/01%20-%20Explore%20STIF%20profile%20dataset.ipynb) and [TABLEAU](https://public.tableau.com/shared/BJGKTGYH7?)
-
-There is no data regarding past incidents, you can only access this information via a real-time API.
-
-However, there is a tweeter account,like this [one](https://twitter.com/Ligne7_RATP) for each metro line.It can probably be used to retrieve historical information.
+You'll find some answer [here](https://github.com/KhalidCK/metro-paris/blob/master/reports/README.md)
 
 ## Install
 
@@ -59,8 +49,8 @@ Choice here are heavily inspired by the [cookiecutter-data-science](https://gith
 ├── notebooks          <- Jupyter notebooks. 
 │
 ├── references         <- Data dictionaries, manuals, and all other explanatory materials.
-├── reports            <- Generated analysis as HTML, PDF, LaTeX, etc.
-│   └── figures        <- Generated graphics and figures to be used in reporting
+├── reports            <- Analysis as Markdown,HTML, PDF, LaTeX, etc.
+│   └── img        <-  Generated graphics and figures to be used in reporting
 │
 ├── requirements.txt   <- The requirements file for reproducing the analysis environment, e.g.
 │                         generated with `pip freeze > requirements.txt`
