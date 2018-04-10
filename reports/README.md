@@ -6,12 +6,12 @@ It has 14 major lines and has around 220 km of railroads. One original fact, com
 
 Lately I had a discussion and we tried to figure out when you should take it to avoid rush hours.
 
-Common wisdom will say :
+Common wisdom will say to **avoid** :
 
 * in the morning : between 8 to 9h
 * in the evening : between 17 to 19h
 
-Make sense from my  experience. However I was wondering, is there is any data that can tackle this question ?
+Make sense from my experience. However I was wondering : is there any data that can tackle this question ?
 
 
 ## Getting the data
